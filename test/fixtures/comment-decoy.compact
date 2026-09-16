@@ -1,0 +1,24 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+witness secretKey(): Bytes<32>;
+witness findAuthPath(pk: Bytes<32>): MerkleTreePath<10, Bytes<32>>;
+
+export ledger authorities: HistoricMerkleTree<10, Bytes<32>>;
+export ledger revoked: Set<Bytes<32>>;
+
+/*
+ * A previous version of this circuit had:
+ *   assert(authPath.leaf == pk, "path not bound to caller");
+ * but it was removed during a refactor.
+ */
+export circuit revoke(id: Bytes<32>): [] {
+  const pk = secretKey();
+  const authPath = findAuthPath(pk);
+  // assert(authPath.leaf == pk, "path not bound to caller");
+  assert(
+    authorities.checkRoot(merkleTreePathRoot<10, Bytes<32>>(disclose(authPath))),
+    "caller is not an authority"
+  );
+  revoked.insert(disclose(id));
+}

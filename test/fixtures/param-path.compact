@@ -1,0 +1,14 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+export ledger items: HistoricMerkleTree<20, Bytes<32>>;
+
+// The path arrives as a parameter of an exported circuit, so the caller chooses it.
+// Deeper generic nesting here on purpose: MerkleTreePath<20, Bytes<32>> and a
+// merkleTreePathRoot<20, Bytes<32>> call both contain an inner `>`.
+export circuit verify(path: MerkleTreePath<20, Bytes<32>>, claimed: Bytes<32>): [] {
+  assert(
+    items.checkRoot(merkleTreePathRoot<20, Bytes<32>>(disclose(path))),
+    "not a member"
+  );
+}

@@ -1,0 +1,14 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+witness findPath(c: Bytes<32>): MerkleTreePath<10, Bytes<32>>;
+
+export ledger roots: Set<Bytes<32>>;
+
+// merkleTreePathRoot is used to publish a root, not to gate anything. There is no
+// checkRoot here, so there is no authorization decision to get wrong.
+export circuit publishRoot(c: Bytes<32>): [] {
+  const path = findPath(c);
+  const root = merkleTreePathRoot<10, Bytes<32>>(disclose(path));
+  roots.insert(root);
+}

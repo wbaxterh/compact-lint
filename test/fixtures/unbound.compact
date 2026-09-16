@@ -1,0 +1,21 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+witness secretKey(): Bytes<32>;
+witness findPath(c: Bytes<32>): MerkleTreePath<10, Bytes<32>>;
+
+export ledger items: HistoricMerkleTree<10, Bytes<32>>;
+export ledger spent: Set<Bytes<32>>;
+
+// The classic unbound form. `path` is witness-supplied and nothing ties it to `c`,
+// so any member's path satisfies the check.
+export circuit claim(): [] {
+  const sk = secretKey();
+  const c = persistentHash<Vector<2, Bytes<32>>>([pad(32, "item:v1"), sk]);
+  const path = findPath(c);
+  assert(
+    items.checkRoot(merkleTreePathRoot<10, Bytes<32>>(disclose(path))),
+    "not a member"
+  );
+  spent.insert(disclose(c));
+}

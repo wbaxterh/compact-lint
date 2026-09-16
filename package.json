@@ -1,0 +1,47 @@
+{
+  "name": "compact-lint",
+  "version": "0.1.0",
+  "description": "Static analysis for Compact smart contracts on Midnight. Finds witness-supplied Merkle paths that are never bound to the leaf they are checked against.",
+  "type": "module",
+  "bin": {
+    "compact-lint": "./bin/cli.js"
+  },
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node test/run.js",
+    "lint:self": "node bin/cli.js test/fixtures"
+  },
+  "keywords": [
+    "midnight",
+    "compact",
+    "zk",
+    "zero-knowledge",
+    "smart-contracts",
+    "static-analysis",
+    "linter",
+    "security",
+    "merkle"
+  ],
+  "author": "Wes Huber <wesleybaxterhuber@gmail.com> (https://github.com/wbaxterh)",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wbaxterh/compact-lint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wbaxterh/compact-lint/issues"
+  },
+  "homepage": "https://github.com/wbaxterh/compact-lint#readme",
+  "engines": {
+    "node": ">=18"
+  }
+}
