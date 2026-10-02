@@ -7,7 +7,7 @@ a witness-supplied Merkle path that reaches `checkRoot` without ever being bound
 the circuit recomputed.
 
 ```
-npx compact-lint contract/src
+npx github:wbaxterh/compact-lint contract/src
 ```
 
 ## The bug it finds
@@ -45,8 +45,13 @@ being exploited.
 
 ## Install
 
+Not on npm yet. Install from the repository:
+
 ```sh
-npm install -g compact-lint     # or: npx compact-lint <path>
+npm install -g github:wbaxterh/compact-lint
+
+# or run it without installing
+npx github:wbaxterh/compact-lint contract/src
 ```
 
 No dependencies. Node 18 or newer.
@@ -67,7 +72,7 @@ Exit codes: `0` clean, `1` findings at or above the failure threshold (default `
 In CI:
 
 ```yaml
-- run: npx compact-lint contract/src
+- run: npx github:wbaxterh/compact-lint contract/src
 ```
 
 ## Rules
