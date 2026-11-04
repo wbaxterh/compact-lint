@@ -7,13 +7,13 @@
  */
 
 /**
- * Replace comment bodies with spaces instead of deleting them.
+ * Replace comments, and optionally string literals, with spaces instead of deleting them.
  *
- * Every byte offset and line number in the returned string matches the original,
+ * Every JavaScript string offset and line number matches the original,
  * which is what lets findings carry real line numbers. String literals are tracked
  * so that a `//` inside a string is not mistaken for a comment.
  */
-export function blankComments(src) {
+function blankNonCode(src, strings) {
   const out = src.split('');
   let i = 0;
   const n = src.length;
@@ -41,6 +41,7 @@ export function blankComments(src) {
       }
       if (c === '"' || c === "'") {
         quote = c;
+        if (strings) out[i] = ' ';
         state = 'string';
         i++;
         continue;
@@ -50,7 +51,7 @@ export function blankComments(src) {
     }
 
     if (state === 'line') {
-      if (c === '\n') {
+      if (c === '\n' || c === '\r') {
         state = 'code';
         i++;
         continue;
@@ -68,16 +69,21 @@ export function blankComments(src) {
         state = 'code';
         continue;
       }
-      if (c !== '\n') out[i] = ' ';
+      if (c !== '\n' && c !== '\r') out[i] = ' ';
       i++;
       continue;
     }
 
     // string
     if (c === '\\') {
+      if (strings) {
+        out[i] = ' ';
+        if (i + 1 < n && d !== '\n' && d !== '\r') out[i + 1] = ' ';
+      }
       i += 2;
       continue;
     }
+    if (strings && c !== '\n' && c !== '\r') out[i] = ' ';
     if (c === quote) {
       state = 'code';
       i++;
@@ -89,7 +95,17 @@ export function blankComments(src) {
   return out.join('');
 }
 
-/** 1-based line number for a byte offset. */
+/** Blank comments while retaining string literals, including their delimiters. */
+export function blankComments(src) {
+  return blankNonCode(src, false);
+}
+
+/** Blank comments and strings so structural parsing sees only code, without shifting offsets. */
+export function blankCommentsAndStrings(src) {
+  return blankNonCode(src, true);
+}
+
+/** 1-based line number for a JavaScript string offset. */
 export function lineOf(src, offset) {
   let line = 1;
   for (let i = 0; i < offset && i < src.length; i++) {

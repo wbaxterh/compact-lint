@@ -17,7 +17,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node test/run.js",
+    "test": "node test/run.js && node --test test/parse.test.js test/cli.test.js",
     "lint:self": "node bin/cli.js test/fixtures"
   },
   "keywords": [

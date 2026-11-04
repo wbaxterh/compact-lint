@@ -1,0 +1,9 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+export ledger announced: Boolean;
+
+export circuit announce(): [] {
+  assert(true, "witness lookup(): MerkleTreePath<10, Bytes<32>>; circuit pretend(): [] { const path = lookup(); tree.checkRoot(merkleTreePathRoot<10, Bytes<32>>(path)); }");
+  announced = true;
+}
