@@ -31,6 +31,26 @@ const cases = [
     want: [],
     why: 'merkleTreePathRoot without checkRoot is not an authorization decision',
   },
+  {
+    file: 'string-decoy.compact',
+    want: [{ severity: 'error', circuit: 'claim', path: 'path', source: 'witness', line: 12 }],
+    why: 'a binding assertion mentioned only in a string must not count',
+  },
+  {
+    file: 'string-brace-unbound.compact',
+    want: [{ severity: 'error', circuit: 'claim', path: 'path', source: 'witness', line: 13 }],
+    why: 'a closing brace in a string must not hide a later unbound check',
+  },
+  {
+    file: 'string-brace-bound.compact',
+    want: [],
+    why: 'a closing brace in a string must not hide a real binding assertion',
+  },
+  {
+    file: 'string-code-text.compact',
+    want: [],
+    why: 'witnesses, circuits and checks mentioned only in a string are not code',
+  },
 ];
 
 let failed = 0;

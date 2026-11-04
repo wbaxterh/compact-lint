@@ -1,0 +1,16 @@
+pragma language_version >= 0.16;
+import CompactStandardLibrary;
+
+witness secretKey(): Bytes<32>;
+witness findPath(c: Bytes<32>): MerkleTreePath<10, Bytes<32>>;
+export ledger items: HistoricMerkleTree<10, Bytes<32>>;
+
+export circuit claim(): [] {
+  const c = persistentHash<Vector<2, Bytes<32>>>([pad(32, "item:v1"), secretKey()]);
+  const path = findPath(c);
+  assert(
+    items.checkRoot(merkleTreePathRoot<10, Bytes<32>>(disclose(path))),
+    "a closing brace } is just text"
+  );
+  assert(path.leaf == c, "path is not for this commitment");
+}

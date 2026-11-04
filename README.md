@@ -114,7 +114,9 @@ compact-lint reports it clean across 837 lines.
 
 The test suite covers the correct form, the unbound form, a caller-supplied path, a
 `merkleTreePathRoot` used outside any authorization decision, and a decoy where the only
-binding assert sits inside comments.
+binding assert sits inside comments or string literals. Strings and comments are masked
+before structural parsing, so code-like error messages and braces inside strings cannot
+hide real checks or create fake ones. Masking preserves source offsets and line numbers.
 
 ```sh
 npm test

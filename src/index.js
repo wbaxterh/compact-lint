@@ -1,13 +1,13 @@
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { join, extname, sep } from 'node:path';
-import { blankComments } from './parse.js';
+import { blankCommentsAndStrings } from './parse.js';
 import * as unboundWitnessPath from './rules/unbound-witness-path.js';
 
 export const rules = [unboundWitnessPath];
 
 /** Lint a string of Compact source. */
 export function lintText(src, filename = '<input>') {
-  const text = blankComments(src);
+  const text = blankCommentsAndStrings(src);
   const findings = [];
   for (const rule of rules) findings.push(...rule.run(src, text, filename));
   return findings;
